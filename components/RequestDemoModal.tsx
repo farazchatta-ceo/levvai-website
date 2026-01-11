@@ -27,31 +27,52 @@ export default function RequestDemoModal({
             </p>
 
             <form
-              className="mt-6 space-y-4"
-              onSubmit={(e) => {
-                e.preventDefault()
-                setSubmitted(true)
-                setTimeout(onClose, 1200)
-              }}
-            >
+                className="mt-6 space-y-4"
+                onSubmit={async (e) => {
+                    e.preventDefault()
+
+                    const form = e.currentTarget
+                    const formData = new FormData(form)
+
+                    await fetch("/api/request-demo", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        name: formData.get("name"),
+                        email: formData.get("email"),
+                        company: formData.get("company"),
+                    }),
+                    })
+
+                    setSubmitted(true)
+                    setTimeout(onClose, 1200)
+                }}
+                >
+
               <input
+                name="name"
                 required
                 placeholder="First name"
                 className="w-full rounded-md border border-neutral-300 p-3 text-sm"
-              />
+                />
+
 
               <input
+                name="company"
                 required
-                placeholder="Last name"
+                placeholder="Company"
                 className="w-full rounded-md border border-neutral-300 p-3 text-sm"
-              />
+                />
+
 
               <input
-                type="email"
-                required
-                placeholder="Work email"
-                className="w-full rounded-md border border-neutral-300 p-3 text-sm"
-              />
+                    name="email"
+                    type="email"
+                    required
+                    placeholder="Work email"
+                    className="w-full rounded-md border border-neutral-300 p-3 text-sm"
+                    />
+
 
               <div className="mt-6 flex gap-3">
                 <button
